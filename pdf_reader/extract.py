@@ -73,20 +73,23 @@ Returns a list of elements (text, tables) from a PDF or image.
 file_path can be path to PDF or image (currently supported: "png", "jpg", "jpeg")
 """
 def get_elements_from_pdf(file_path: str, detected_areas: Union[None, Dict[int, List[RelativeAreaPrediction]]] = None, force_ocr: bool = False, **kwargs) -> List[ExtractedPage]:
-    pages = get_pdf_pages(file_path, None, force_ocr, **kwargs)
-    print(file_path, " FOUND: ", len(pages), "OCR:", force_ocr)
+    log_file = file_path + '.log'
+    with open(log_file,'w') as logf:
+        pages = get_pdf_pages(file_path, None, force_ocr, **kwargs)
+        print(file_path, " FOUND: ", len(pages), "OCR:", force_ocr)
+        logf.writelines(str(file_path), " : FOUND: ", len(pages), " OCR:", force_ocr)
 
-    all_pages = []
+        all_pages = []
 
-    for page_index, p in enumerate(pages):
-        page_elements = p.extract_text_and_tables(**kwargs)
-        areas = None
-        if detected_areas is not None and page_index in detected_areas:
-            areas = relative_areas_to_area_predictions(detected_areas[page_index], p.page_size.width(), p.page_size.height())
-        paragraphs = make_paragraphs(page_elements, PdfReaderConfig(20, 10, 6), areas, p.natural_text.text_raw, p.page_size.width())
-        all_pages.append(ExtractedPage(page_index, p.page_size, page_elements, paragraphs))
+        for page_index, p in enumerate(pages):
+            page_elements = p.extract_text_and_tables(**kwargs)
+            areas = None
+            if detected_areas is not None and page_index in detected_areas:
+                areas = relative_areas_to_area_predictions(detected_areas[page_index], p.page_size.width(), p.page_size.height())
+            paragraphs = make_paragraphs(page_elements, PdfReaderConfig(20, 10, 6), areas, p.natural_text.text_raw, p.page_size.width())
+            all_pages.append(ExtractedPage(page_index, p.page_size, page_elements, paragraphs))
 
-    return all_pages
+        return all_pages
 
 
 def visualise_pdf_output(pdf_path: str, output_path: str, force_ocr: bool = False, **kwargs):
