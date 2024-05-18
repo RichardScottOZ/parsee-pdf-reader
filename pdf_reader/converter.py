@@ -91,6 +91,7 @@ def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force
     config = PdfReaderConfig(None, None, None) if config is None else config
     # check if file is an image
     if is_image(pdf_path):
+        print(file_path, " IS IMAGE")
         mediabox, text_boxes = get_elements_from_image(pdf_path)
         return [ParseePdfPage(0, pdf_path, mediabox, text_boxes, config, NaturalTextHelper(None))]
     document, interpreter, device, fp, pypdf_reader = open_pdf(pdf_path)
@@ -99,8 +100,10 @@ def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force
         interpreter.process_page(page)
         layout = device.get_result()
         text_boxes = parse_layout(layout)
+        print(pdf_path, " NEEDS OCR:", needs_ocr(text_boxes))
         run_ocr = force_ocr or needs_ocr(text_boxes)
         if run_ocr:
+            print("RUNNING OCR: ", pdf_path)
             mediabox, text_boxes, pypdf_text = repair_layout(pdf_path, page_index)
             page_obj = ParseePdfPage(page_index, pdf_path, mediabox, text_boxes, config, pypdf_text)
         else:
