@@ -75,7 +75,7 @@ file_path can be path to PDF or image (currently supported: "png", "jpg", "jpeg"
 def get_elements_from_pdf(file_path: str, detected_areas: Union[None, Dict[int, List[RelativeAreaPrediction]]] = None, force_ocr: bool = False, **kwargs) -> List[ExtractedPage]:
     log_file = file_path + '.log'
     with open(log_file,'w') as logf:
-        pages = get_pdf_pages(file_path, None, force_ocr, **kwargs)
+        pages = get_pdf_pages(file_path, None, force_ocr, logf, **kwargs)
         print(file_path, " FOUND: ", len(pages), "OCR:", force_ocr)
         logf.writelines(str(file_path) + " : FOUND: " + str(len(pages)) + " OCR:" + str(force_ocr) + "\n")
 
