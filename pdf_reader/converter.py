@@ -101,7 +101,7 @@ def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force
         layout = device.get_result()
         text_boxes = parse_layout(layout)
         print(page_index, pdf_path, " NEEDS OCR:", needs_ocr(text_boxes))
-        logf.writelines(str(page_index) + pdf_path + " NEEDS OCR:" + str(needs_ocr(text_boxes)) ))
+        logf.writelines(str(page_index) + pdf_path + " NEEDS OCR:" + str(needs_ocr(text_boxes)) )
 
         run_ocr = force_ocr or needs_ocr(text_boxes)
         if run_ocr:
