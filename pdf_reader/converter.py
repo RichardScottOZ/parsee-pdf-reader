@@ -88,7 +88,6 @@ def get_natural_text(reader: pypdf.PdfReader, page_index: int) -> NaturalTextHel
 
 
 def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force_ocr: bool = False, logf=None, **kwargs) -> List[ParseePdfPage]:
-    print(logf)
     config = PdfReaderConfig(None, None, None) if config is None else config
     # check if file is an image
     if is_image(pdf_path):
