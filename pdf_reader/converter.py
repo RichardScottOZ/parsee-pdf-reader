@@ -87,7 +87,7 @@ def get_natural_text(reader: pypdf.PdfReader, page_index: int) -> NaturalTextHel
     return NaturalTextHelper(pypdf_text)
 
 
-def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force_ocr: bool = False, **kwargs) -> List[ParseePdfPage]:
+def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force_ocr: bool = False, logf, **kwargs) -> List[ParseePdfPage]:
     config = PdfReaderConfig(None, None, None) if config is None else config
     # check if file is an image
     if is_image(pdf_path):
@@ -101,6 +101,8 @@ def get_pdf_pages(pdf_path: str, config: Optional[PdfReaderConfig] = None, force
         layout = device.get_result()
         text_boxes = parse_layout(layout)
         print(page_index, pdf_path, " NEEDS OCR:", needs_ocr(text_boxes))
+        logf.writelines(str(page_index) + pdf_path + " NEEDS OCR:" + str(needs_ocr(text_boxes)) ))
+
         run_ocr = force_ocr or needs_ocr(text_boxes)
         if run_ocr:
             print("RUNNING OCR: ", pdf_path)
