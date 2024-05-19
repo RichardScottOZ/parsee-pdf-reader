@@ -77,7 +77,7 @@ def get_elements_from_pdf(file_path: str, detected_areas: Union[None, Dict[int, 
     with open(log_file,'w') as logf:
         pages = get_pdf_pages(file_path, None, force_ocr, **kwargs)
         print(file_path, " FOUND: ", len(pages), "OCR:", force_ocr)
-        logf.writelines(str(file_path) + " : FOUND: " + str(len(pages)) + " OCR:" + str(force_ocr))
+        logf.writelines(str(file_path) + " : FOUND: " + str(len(pages)) + " OCR:" + str(force_ocr) + "\n")
 
         all_pages = []
 
